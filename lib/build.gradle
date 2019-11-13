@@ -27,8 +27,8 @@ publish {
     repoName = 'maven'
     userOrg = 'ooftf'      // bintray注册的用户名
     groupId = 'com.ooftf'
-    artifactId = 'master-widget-statelayout' // bintray创建的package
-    publishVersion = '1.0.2'
+    artifactId = 'queue-layout' // bintray创建的package
+    publishVersion = '0.0.1-snapshot'
     desc = 'nothing'
     bintrayUser = 'ooftf'
     bintrayKey = LocalBintrayKey()
