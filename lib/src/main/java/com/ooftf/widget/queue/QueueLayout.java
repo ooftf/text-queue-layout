@@ -63,6 +63,18 @@ public class QueueLayout extends RecyclerView {
     }
 
     @Override
+    public void smoothScrollToPosition(int position) {
+        super.smoothScrollToPosition(position);
+        current = position;
+    }
+
+    @Override
+    public void scrollToPosition(int position) {
+        super.scrollToPosition(position);
+        current = position;
+    }
+
+    @Override
     protected void onDetachedFromWindow() {
         if (subscribe != null) {
             subscribe.dispose();

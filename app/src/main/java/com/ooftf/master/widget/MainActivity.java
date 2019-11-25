@@ -11,10 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ooftf.widget.queue.SmoothLinearLayoutManager;
-import com.ooftf.widget.queue.QueueLayout;
 
 public class MainActivity extends AppCompatActivity {
-    QueueLayout textQueueLayout;
+    RecyclerView textQueueLayout;
     View button;
     int current = 5;
 
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 current++;
-                textQueueLayout.getAdapter().notifyItemInserted(current);
+                textQueueLayout.getAdapter().notifyDataSetChanged();
             }
         });
     }
