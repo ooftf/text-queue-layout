@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.concurrent.TimeUnit;
@@ -54,13 +55,43 @@ public class QueueLayout extends RecyclerView {
             public void accept(Long aLong) throws Exception {
                 RecyclerView.Adapter adapter = getAdapter();
 
-                if (adapter != null && adapter.getItemCount() > current) {
-                    current++;
-                    smoothScrollToPosition(current);
+                if (adapter != null && adapter.getItemCount() - 1 > current && isShouldAutoScroll()) {
+                    smoothScrollToPosition(current + 1);
                 }
             }
         });
     }
+
+
+    boolean isShouldAutoScroll() {
+        if (!touchEnable) {
+            return true;
+        }
+
+        if (!isTouching) {
+            return true;
+        }
+        return false;
+    }
+
+    int getFirst() {
+        LayoutManager layoutManager = getLayoutManager();
+        if (layoutManager instanceof LinearLayoutManager) {
+            return ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
+        }
+        return 0;
+    }
+
+
+    int getEnd() {
+        LayoutManager layoutManager = getLayoutManager();
+        if (layoutManager instanceof LinearLayoutManager) {
+            return ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+        }
+        return 0;
+    }
+
+    boolean isTouching = false;
 
     @Override
     public void smoothScrollToPosition(int position) {
@@ -82,9 +113,23 @@ public class QueueLayout extends RecyclerView {
         super.onDetachedFromWindow();
     }
 
+    boolean touchEnable = true;
+
+    public void setTouchEnable(boolean toucheEnable) {
+        this.touchEnable = toucheEnable;
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
-        return false;
+        if (touchEnable) {
+            if (e.getAction() == MotionEvent.ACTION_DOWN) {
+                isTouching = true;
+            } else if (e.getAction() == MotionEvent.ACTION_UP || e.getAction() == MotionEvent.ACTION_CANCEL) {
+                isTouching = false;
+            }
+            return super.onTouchEvent(e);
+        } else {
+            return false;
+        }
     }
 }
