@@ -49,14 +49,18 @@ public class QueueLayout extends RecyclerView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        subscribe = Observable.interval(2, TimeUnit.SECONDS).subscribe(new Consumer<Long>() {
+        if (isAutoScroll) {
+            start();
+        }
+    }
 
+    private void start() {
+        subscribe = Observable.interval(2, TimeUnit.SECONDS).subscribe(new Consumer<Long>() {
             @Override
             public void accept(Long aLong) throws Exception {
-                RecyclerView.Adapter adapter = getAdapter();
-
-                if (adapter != null && adapter.getItemCount() - 1 > current && isShouldAutoScroll()) {
-                    smoothScrollToPosition(current + 1);
+                Adapter adapter = getAdapter();
+                if (adapter != null && adapter.getItemCount() - 1 > getEnd() && isShouldAutoScroll()) {
+                    smoothScrollToPosition(getEnd() + 1);
                 }
             }
         });
@@ -82,11 +86,23 @@ public class QueueLayout extends RecyclerView {
         return 0;
     }
 
+    private boolean isAutoScroll = false;
+
+    public void setAutoScroll(boolean isAutoScroll) {
+        this.isAutoScroll = isAutoScroll;
+        if (isAutoScroll) {
+            start();
+        } else {
+            if (subscribe != null) {
+                subscribe.dispose();
+            }
+        }
+    }
 
     int getEnd() {
         LayoutManager layoutManager = getLayoutManager();
         if (layoutManager instanceof LinearLayoutManager) {
-            return ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+            return ((LinearLayoutManager) layoutManager).findLastCompletelyVisibleItemPosition();
         }
         return 0;
     }
