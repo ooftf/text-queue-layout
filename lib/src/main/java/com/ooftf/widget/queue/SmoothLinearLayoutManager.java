@@ -3,6 +3,7 @@ package com.ooftf.widget.queue;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
@@ -43,8 +44,7 @@ public class SmoothLinearLayoutManager extends LinearLayoutManager {
 
         @Override
         protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
-            //2 / displayMetrics.densityDpi
-            return 1;
+            return 500f/displayMetrics.densityDpi;
         }
     }
 

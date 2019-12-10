@@ -4,16 +4,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ooftf.widget.queue.QueueLayout;
 import com.ooftf.widget.queue.SmoothLinearLayoutManager;
 
 public class MainActivity extends AppCompatActivity {
-    RecyclerView textQueueLayout;
+    QueueLayout textQueueLayout;
     View button;
     int current = 5;
 
@@ -24,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
         textQueueLayout = findViewById(R.id.textQueueLayout);
         button = findViewById(R.id.button);
         textQueueLayout.setLayoutManager(new SmoothLinearLayoutManager(this, RecyclerView.VERTICAL, true));
+        textQueueLayout.setTouchEnable(false);
+        textQueueLayout.setAutoScroll(false);
         textQueueLayout.setAdapter(new RecyclerView.Adapter() {
             @NonNull
             @Override
@@ -50,5 +54,13 @@ public class MainActivity extends AppCompatActivity {
                 textQueueLayout.getAdapter().notifyDataSetChanged();
             }
         });
+
+        findViewById(R.id.button2)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        textQueueLayout.smoothScrollToPosition(textQueueLayout.getAdapter().getItemCount()-1);
+                    }
+                });
     }
 }
